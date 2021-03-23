@@ -46,6 +46,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  //TODO implement state
   int _counter = 0;
 
   void _incrementCounter() {
@@ -67,6 +68,8 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
+
+    //TODO implement correct widget tree
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -111,3 +114,98 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+//########################################################
+//Display
+//########################################################
+class _Display extends StatelessWidget{
+  @override
+  Widget build(BuildContext context){
+    //TODO implement display
+  }
+}
+
+//#########################################################
+//Number button
+//#########################################################
+class _NumButton extends StatelessWidget{
+  int value =0;
+
+  void handleButtonClick(){
+    //TODO add button logic
+  }
+
+  _NumButton(this.value);
+
+  @override
+  Widget build(BuildContext context){
+    return OutlinedButton(
+        style: OutlinedButton.styleFrom(
+            shape: CircleBorder()
+        ),
+        onPressed: handleButtonClick,
+        child: Text(
+          value.toString(),
+          style: TextStyle(fontSize: 24),
+        )
+    );
+  }
+}
+
+
+//#######################################################
+//operation buttons
+//#######################################################
+
+class _AddButton extends StatelessWidget{
+  void handleAdditionClick(){
+    //TODO add addition logic
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+        onPressed: handleAdditionClick,
+        child: Text(
+          '+',
+          style: TextStyle(fontSize: 24),
+        )
+    );
+  }
+}
+
+class _SubtractButton extends StatelessWidget{
+  void handleSubtractClick(){
+    //TODO add subtraction logic
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+        onPressed: handleSubtractClick,
+        child: Text(
+          '-',
+          style: TextStyle(fontSize: 24),
+        )
+    );
+  }
+}
+
+class _EqualButton extends StatelessWidget{
+  void handleEqualClick(){
+    //TODO add Equal logic
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+        onPressed: handleEqualClick,
+        child: Text(
+          '=',
+          style: TextStyle(fontSize: 24),
+        )
+    );
+  }
+}
+
+
+
