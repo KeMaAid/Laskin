@@ -22,13 +22,13 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage('Flutter Demo Home Page'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage(title): this.title = title;
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -70,7 +70,6 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
 
-    //TODO implement correct widget tree
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -99,7 +98,8 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             _Display(),
           Row(
-            children: [GridView(
+            children: [GridView.count(
+              crossAxisCount: 3,
               children: [
                 for (var i=1; i>=9; i++) _NumButton(i),
               ], // NUMButtons
@@ -127,6 +127,7 @@ class _Display extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     //TODO implement display
+    return Text("THIS IS A DISPLAY");
   }
 }
 
