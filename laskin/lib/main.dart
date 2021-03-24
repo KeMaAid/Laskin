@@ -42,6 +42,11 @@ class _HomePageState extends State<HomePage> {
       _currentNumber = value;
     });
   }
+  void setSaved(int value){
+    this.setState(() {
+      _savedNumber = value;
+    });
+  }
   int getSaved(){
     return _savedNumber;
   }
@@ -51,7 +56,8 @@ class _HomePageState extends State<HomePage> {
 
   void handleClearEvent(){
     setCurrent(0);
-    currentToSaved();
+    setSaved(0);
+    _opValue=0;
   }
 
   void handleAdditionEvent(){
@@ -76,13 +82,13 @@ class _HomePageState extends State<HomePage> {
         setCurrent(getCurrent() + getSaved());
         break;
       case 2:
-        setCurrent(getCurrent() - getSaved());
+        setCurrent(getSaved()-getCurrent());
         break;
       case 3:
         setCurrent(getCurrent() * getSaved());
         break;
       case 4:
-        setCurrent((getCurrent() / getSaved()).round());
+        setCurrent((getSaved() / getCurrent()).round());
         break;
       default:
         print('ERROR IN OPERATION CODE');
@@ -124,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                   NewButton(text: "1", onPressed: () => handleNumButtonEvent(1),),
                   NewButton(text: "2", onPressed: () => handleNumButtonEvent(2),),
                   NewButton(text: "3", onPressed: () => handleNumButtonEvent(3),),
-                  NewButton(text: "+", onPressed: handleAdditionEvent,),
+                  NewButton(text: "+", onPressed: () => handleAdditionEvent(),),
                 ],
               ),
               Row(
@@ -133,7 +139,7 @@ class _HomePageState extends State<HomePage> {
                   NewButton(text: "4", onPressed: () => handleNumButtonEvent(4),),
                   NewButton(text: "5", onPressed: () => handleNumButtonEvent(5),),
                   NewButton(text: "6", onPressed: () => handleNumButtonEvent(6),),
-                  NewButton(text: "-", onPressed: handleSubtractionEvent,),
+                  NewButton(text: "-", onPressed: () => handleSubtractionEvent(),),
                 ],
               ),
               Row(
@@ -142,13 +148,13 @@ class _HomePageState extends State<HomePage> {
                   NewButton(text: "7", onPressed: () => handleNumButtonEvent(7),),
                   NewButton(text: "8", onPressed: () => handleNumButtonEvent(8),),
                   NewButton(text: "9", onPressed: () => handleNumButtonEvent(9),),
-                  NewButton(text: "*", onPressed: handleMultiplicationEvent,),
+                  NewButton(text: "*", onPressed: () => handleMultiplicationEvent(),),
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  NewButton(text: "C", onPressed: () => handleClearEvent,),
+                  NewButton(text: "C", onPressed: () => handleClearEvent(),),
                   NewButton(text: "0", onPressed: () => handleNumButtonEvent(0),),
                   NewButton(text: "=", onPressed: () => handleEqualEvent(),),
                   NewButton(text: "/", onPressed: () => handleDivideEvent(),),
@@ -169,13 +175,23 @@ class NewButton extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return MaterialButton(
-      height: 125.0,
-      child: Text(text,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40.0)),
-      textColor: Colors.black,
-      color: Colors.grey[100],
-      onPressed: onPressed,
+    return Padding(
+        padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+        child: Material(
+          shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(200.0) ),
+          elevation: 18.0,
+          color: Color(0xFF801E48),
+          clipBehavior: Clip.antiAlias,
+          child: MaterialButton(
+            minWidth: 100.0,
+            height: 100.0,
+            child: Text(text,
+                style:  TextStyle(fontWeight: FontWeight.bold, fontSize: 40.0)),
+            textColor: Colors.black,
+            color: Colors.grey[100],
+            onPressed: onPressed,
+          ),
+        )
     );
   }
 }
