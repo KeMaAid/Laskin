@@ -47,7 +47,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   //TODO implement state
-  int _counter = 0;
+  int _savedNumber = 0;
+  int _currentNumber = 0;
 
   void _incrementCounter() {
     setState(() {
@@ -56,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-      _counter++;
+      _currentNumber++;
     });
   }
 
@@ -95,25 +96,30 @@ class _MyHomePageState extends State<MyHomePage> {
           // axis because Columns are vertical (the cross axis would be
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+          children: [
+            _Display(),
+          Row(
+            children: [GridView(
+              children: [
+                for (var i=1; i>=9; i++) _NumButton(i),
+              ], // NUMButtons
+                ),
+              Column(
+                children: [
+                  _AddButton(),
+                  _SubtractButton(),
+                  _EqualButton(),
+                ], // operation buttons
+              ),
+              ],
+          )],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
+
+
 //########################################################
 //Display
 //########################################################
