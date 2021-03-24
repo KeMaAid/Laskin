@@ -168,8 +168,8 @@ class _HomePageState extends State<HomePage> {
 }
 
 class NewButton extends StatelessWidget{
-  final String text;
-  final Function onPressed;
+  final text;
+  final onPressed;
 
   const NewButton({this.text, this.onPressed});
 
