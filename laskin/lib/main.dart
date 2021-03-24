@@ -9,59 +9,147 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage('Flutter Demo Home Page'),
+      title: 'Calculator',
+      theme: new ThemeData.dark(),
+      home: new HomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage(title): this.title = title;
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class HomePage extends StatefulWidget {
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  //TODO implement state
+class _HomePageState extends State<HomePage> {
   int _savedNumber = 0;
   int _currentNumber = 0;
+  int _opValue =0;
+  //1 sum
+  //2 sub
+  //3 mul
+  //4 div
+  
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _currentNumber++;
+  void currentToSaved(){
+    this.setState(() {
+      _savedNumber = _currentNumber;
+      _currentNumber = 0;
+    });}
+  void setCurrent(int value){
+    this.setState(() {
+      _currentNumber = value;
     });
   }
+  int getSaved(){
+    return _savedNumber;
+  }
+  int getCurrent(){
+    return _currentNumber;
+  }
 
+  void handleClearEvent(){
+    setCurrent(0);
+    currentToSaved();
+  }
+
+  void handleAdditionEvent(){
+    currentToSaved();
+    _opValue = 1;
+  }
+  void handleSubtractionEvent(){
+    currentToSaved();
+    _opValue = 2;
+  }
+  void handleMultiplicationEvent(){
+    currentToSaved();
+    _opValue = 3;
+  }
+  void handleDivideEvent(){
+    currentToSaved();
+    _opValue = 4;
+  }
+  void handleEqualEvent() {
+    switch (_opValue) {
+      case 1:
+        setCurrent(getCurrent() + getSaved());
+        break;
+      case 2:
+        setCurrent(getCurrent() - getSaved());
+        break;
+      case 3:
+        setCurrent(getCurrent() * getSaved());
+        break;
+      case 4:
+        setCurrent((getCurrent() / getSaved()).round());
+        break;
+      default:
+        print('ERROR IN OPERATION CODE');
+        break;
+    }
+  }
+  void handleNumButtonEvent(int value){
+    setCurrent(int.parse(getCurrent().toString()+value.toString()));
+  }
   @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+        appBar: new AppBar(
+          title: new Text("Calculator"),
+        ),
+        body: Container(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              _Display(
+
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  _NumButton(value: 1, onPressed: handleNumButtonEvent,),
+                  _NumButton(value: 2, onPressed: handleNumButtonEvent,),
+                  _NumButton(value: 3, onPressed: handleNumButtonEvent,),
+                  _AddButton(onPressed: handleAdditionEvent,),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  _NumButton(value: 4, onPressed: handleNumButtonEvent,),
+                  _NumButton(value: 5, onPressed: handleNumButtonEvent,),
+                  _NumButton(value: 6, onPressed: handleNumButtonEvent,),
+                  _SubtractButton(onPressed: handleSubtractionEvent,),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  _NumButton(value: 7, onPressed: handleNumButtonEvent,),
+                  _NumButton(value: 8, onPressed: handleNumButtonEvent,),
+                  _NumButton(value: 9, onPressed: handleNumButtonEvent,),
+                  _MultiplicationButton(onPressed: handleMultiplicationEvent,),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  _ClearButton(onPressed: handleClearEvent,),
+                  _NumButton(value: 0, onPressed: handleNumButtonEvent,),
+                  _EqualButton(onPressed: handleEqualEvent,),
+                  _DivideButton(onPressed: handleDivideEvent,),
+                ],
+              )
+            ],
+          ),
+        )
+    );
+  }
+}
+/*
+@override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
@@ -97,28 +185,34 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _Display(),
-          Row(
-            children: [GridView.count(
-              crossAxisCount: 3,
-              children: [
-                for (var i=1; i>=9; i++) _NumButton(i),
-              ], // NUMButtons
-                ),
-              Column(
+            Row(
+              children: [GridView.count(
+                crossAxisCount: 3,
                 children: [
-                  _AddButton(),
-                  _SubtractButton(),
-                  _EqualButton(),
-                ], // operation buttons
-              ),
-              ],
-          )],
+                  for (var i=1; i>=9; i++) _NumButton(value: i, onPressed: handleNumButtonEvent),
+                ], // NUMButtons
+                  ),
+                Column(
+                  children: [
+                    _AddButton(
+                      onPressed: handleAdditionEvent,
+                    ),
+                    _SubtractButton(
+                      onPressed: handleSubtractionEvent,
+                    ),
+                    _EqualButton(
+                      onPressed: handleEqualEvent,
+                    ),
+                  ], // operation buttons
+                ),
+                ],
+            )],
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
-
+*/
 
 //########################################################
 //Display
@@ -126,8 +220,21 @@ class _MyHomePageState extends State<MyHomePage> {
 class _Display extends StatelessWidget{
   @override
   Widget build(BuildContext context){
-    //TODO implement display
-    return Text("THIS IS A DISPLAY");
+    return Container(
+      constraints: BoxConstraints.expand(
+        height: 100.0,
+      ),
+      alignment: Alignment.bottomRight,
+      color: Colors.white,
+      child: Text(
+        "0",
+        style: TextStyle(
+            fontSize: 50.0,
+            color: Colors.black
+        ),
+        textAlign: TextAlign.right,
+      ),
+    );
   }
 }
 
@@ -135,25 +242,25 @@ class _Display extends StatelessWidget{
 //Number button
 //#########################################################
 class _NumButton extends StatelessWidget{
-  int value =0;
+  final int value;
+  final Function onPressed;
 
-  void handleButtonClick(){
-    //TODO add button logic
+  Function handleClick(){
+    this.onPressed(value);
   }
 
-  _NumButton(this.value);
+  const _NumButton({this.value, this.onPressed});
 
   @override
   Widget build(BuildContext context){
-    return OutlinedButton(
-        style: OutlinedButton.styleFrom(
-            shape: CircleBorder()
-        ),
-        onPressed: handleButtonClick,
+    return MaterialButton(
+      height: 125.0,
+      textColor: Colors.black,
+      color: Colors.grey[100],
+        onPressed: handleClick,
         child: Text(
           value.toString(),
-          style: TextStyle(fontSize: 24),
-        )
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40.0)),
     );
   }
 }
@@ -164,55 +271,119 @@ class _NumButton extends StatelessWidget{
 //#######################################################
 
 class _AddButton extends StatelessWidget{
-  void handleAdditionClick(){
-    //TODO add addition logic
-  }
+  final Function onPressed;
+
+  const _AddButton({this.onPressed});
+
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-        onPressed: handleAdditionClick,
-        child: Text(
-          '+',
-          style: TextStyle(fontSize: 24),
-        )
+    return MaterialButton(
+      height: 125.0,
+      textColor: Colors.black,
+      color: Colors.grey[100],
+      onPressed: onPressed,
+      child: Text('+',
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40.0),
+      ),
     );
   }
 }
 
 class _SubtractButton extends StatelessWidget{
-  void handleSubtractClick(){
-    //TODO add subtraction logic
-  }
+  final Function onPressed;
+
+  const _SubtractButton({this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-        onPressed: handleSubtractClick,
-        child: Text(
-          '-',
-          style: TextStyle(fontSize: 24),
-        )
+    return MaterialButton(
+      height: 125.0,
+      textColor: Colors.black,
+      color: Colors.grey[100],
+      onPressed: onPressed,
+      child: Text('-',
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40.0),
+      ),
+    );
+  }
+}
+
+class _MultiplicationButton extends StatelessWidget{
+  final Function onPressed;
+
+  const _MultiplicationButton({this.onPressed});
+
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialButton(
+      height: 125.0,
+      textColor: Colors.black,
+      color: Colors.grey[100],
+      onPressed: onPressed,
+      child: Text('*',
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40.0),
+      ),
+    );
+  }
+}
+
+class _DivideButton extends StatelessWidget{
+  final Function onPressed;
+
+  const _DivideButton({this.onPressed});
+
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialButton(
+      height: 125.0,
+      textColor: Colors.black,
+      color: Colors.grey[100],
+      onPressed: onPressed,
+      child: Text('/',
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40.0),
+      ),
     );
   }
 }
 
 class _EqualButton extends StatelessWidget{
-  void handleEqualClick(){
-    //TODO add Equal logic
-  }
+  final Function onPressed;
+
+  const _EqualButton({this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-        onPressed: handleEqualClick,
-        child: Text(
-          '=',
-          style: TextStyle(fontSize: 24),
-        )
+    return MaterialButton(
+        height: 125.0,
+        textColor: Colors.black,
+        color: Colors.grey[100],
+        onPressed: onPressed,
+        child: Text('=',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40.0),
+        ),
     );
   }
 }
 
+class _ClearButton extends StatelessWidget{
+  final Function onPressed;
 
+  const _ClearButton({this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialButton(
+      height: 125.0,
+      textColor: Colors.black,
+      color: Colors.grey[100],
+      onPressed: onPressed,
+      child: Text('C',
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40.0),
+      ),
+    );
+  }
+}
 
